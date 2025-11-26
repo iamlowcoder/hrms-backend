@@ -384,11 +384,14 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
 }
 
 
-    public  UserResponse toUserResponse(User user) {
+    public UserResponse toUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
-                .orgId(user.getOrganization().getId())
-                .organizationName(user.getOrganization().getName())
+
+                // NULL-SAFE Organization
+                .orgId(user.getOrganization() != null ? user.getOrganization().getId() : null)
+                .organizationName(user.getOrganization() != null ? user.getOrganization().getName() : null)
+
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
@@ -401,12 +404,16 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
                 .lastLogin(user.getLastLogin())
                 .isActive(user.isActive())
                 .createdAt(user.getCreatedAt())
+
+                // NULL-SAFE Created By
                 .createdById(user.getCreatedBy() != null ? user.getCreatedBy().getId() : null)
                 .createdByFullName(user.getCreatedBy() != null ? user.getCreatedBy().getFullName() : null)
-                .roleName(user.getRole().getName().name())
+
+                .roleName(user.getRole() != null ? user.getRole().getName().name() : null)
                 .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }
+
 
 
 }

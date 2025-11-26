@@ -26,10 +26,18 @@ public class JwtService {
         this.expirationSeconds = expirationSeconds;
     }
 
-    public String generateToken(User userDetails) {
+//    public String generateToken(User userDetails) {
+//        Map<String, Object> claims = new HashMap<>();
+//        return createToken(claims, userDetails.getUsername());
+//
+//    }
+
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        claims.put("role", user.getRole().getName().name()); // ADMIN / HR / EMPLOYEE
+        return createToken(claims, user.getEmail());
     }
+
 
     private String createToken(Map<String, Object> claims, String subject) {
         Date now = new Date();

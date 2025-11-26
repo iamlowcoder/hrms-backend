@@ -6,7 +6,7 @@
 *.iws
 *.ipr
 shelf/
-workspace.xml
+.idea/workspace.xml
 
 # ======================================
 # Eclipse / Spring Tool Suite

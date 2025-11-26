@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +39,12 @@ public class SecurityConfig {
 //                .csrf(AbstractHttpConfigurer::disable)
 //                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //                .authorizeHttpRequests(auth -> auth
+//                                .requestMatchers(
+//                                "/swagger-ui.html",
+//                                "/swagger-ui/**",
+//                                "/v3/api-docs/**",
+//                                "/api-docs/**",
+//                                "/v3/api-docs.yaml").permitAll()
 //                        .requestMatchers("/api/auth/**").permitAll()
 //                        .requestMatchers("POST", "/api/users").hasAnyRole("ADMIN", "HR")
 //                        .requestMatchers("GET", "/api/users", "/api/users/**").hasAnyRole("ADMIN", "HR")
@@ -57,24 +64,34 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // --- Allow Swagger (Public Access) ---
+
+                        // --- Allow Swagger / OpenAPI ---
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs.yaml",
-                                "/api-docs/**"
+                                "/api-docs/**",
+                                "/v3/api-docs.yaml"
                         ).permitAll()
 
-                        // --- Your existing public auth API ---
+                        // --- Public Authentication APIs ---
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // --- Your business rules remain unchanged ---
-                        .requestMatchers("POST", "/api/users").hasAnyRole("ADMIN", "HR")
-                        .requestMatchers("GET", "/api/users", "/api/users/**").hasAnyRole("ADMIN", "HR")
-                        .requestMatchers("PUT", "/api/users/**").access(new SameUserOrAdminHrAuthorizationManager())
-                        .requestMatchers("DELETE", "/api/users/**").hasRole("ADMIN")
+                        // --- User Management Rules ---
+                        .requestMatchers(HttpMethod.POST, "/api/users").hasAnyRole("ADMIN", "HR")
 
+                        .requestMatchers(HttpMethod.GET, "/api/users")
+                        .hasAnyRole("ADMIN", "HR")
+                        .requestMatchers(HttpMethod.GET, "/api/users/*")
+                        .authenticated()
+
+                        .requestMatchers(HttpMethod.PUT, "/api/users/**")
+                        .access(new SameUserOrAdminHrAuthorizationManager())
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/**")
+                        .hasRole("ADMIN")
+
+                        // --- Any Other Request Must Be Authenticated ---
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -82,6 +99,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
     @Bean
