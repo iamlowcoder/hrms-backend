@@ -384,7 +384,7 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
 }
 
 
-    private UserResponse toUserResponse(User user) {
+    public  UserResponse toUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .orgId(user.getOrganization().getId())
@@ -407,6 +407,8 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
                 .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }
+
+
 }
 
 

@@ -33,5 +33,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<Object> findByUsername(String username);
 
     Optional<User> findByEmployeeCode(String employeeCode);
+
+    @Query("""
+    SELECT u FROM User u
+    JOIN FETCH u.organization
+    JOIN FETCH u.role
+    LEFT JOIN FETCH u.createdBy
+    WHERE u.email = :email
+""")
+    Optional<User> findByEmailWithAllRelations(@Param("email") String email);
+
+
+
 }
 
