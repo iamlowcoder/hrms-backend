@@ -17,8 +17,6 @@ public class JwtConfig {
 
     @Bean
     public SecretKey secretKey() {
-        // For HS512, the secret should be at least 64 bytes (512 bits)
-        // Keys.hmacShaKeyFor() will automatically select the algorithm based on key size
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 

@@ -34,11 +34,10 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(RegisterRequest request, String currentUserEmail) {
-        // Get current user
+
         User currentUser = userRepository.findByEmail(currentUserEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("Current user not found"));
 
-        // Validate role creation permissions
         RoleName requestedRole = RoleName.valueOf(request.getRoleName().toUpperCase());
         RoleName currentUserRole = currentUser.getRole().getName();
 
@@ -47,13 +46,11 @@ public class UserService {
         }
         if (currentUserRole == RoleName.ADMIN &&
             (requestedRole == RoleName.ADMIN || requestedRole == RoleName.HR)) {
-            // Only ADMIN can create ADMIN or HR - this is allowed
         } else if (currentUserRole != RoleName.ADMIN &&
                    (requestedRole == RoleName.ADMIN || requestedRole == RoleName.HR)) {
             throw new IllegalArgumentException("Only ADMIN can create ADMIN or HR users");
         }
 
-        // Check if email already exists
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists: " + request.getEmail());
         }
@@ -61,13 +58,12 @@ public class UserService {
         Role role = roleRepository.findByName(requestedRole)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid role: " + request.getRoleName()));
 
-        // Generate employee code if not provided
+
         final String employeeCode;
         if (request.getEmployeeCode() == null || request.getEmployeeCode().trim().isEmpty()) {
             employeeCode = generateEmployeeCodeForRole(requestedRole);
         } else {
             employeeCode = request.getEmployeeCode();
-            // Check if provided employee code already exists
             if (userRepository.findAll().stream()
                     .anyMatch(u -> u.getEmployeeCode().equals(employeeCode))) {
                 throw new IllegalArgumentException("Employee code already exists: " + employeeCode);
@@ -219,9 +215,6 @@ public UserResponse updateUser(Long id, UpdateUserRequest request, String curren
         throw new IllegalArgumentException("Access denied: You can only update your own profile");
     }
 
-    // -----------------------------------------------------------------------------------------
-    // CASE 1: Same user (non admin/hr) → can update ONLY fullName + phone
-    // -----------------------------------------------------------------------------------------
     if (isSameUser && !isAdminOrHr) {
 
         if (request.getFullName() != null) {
@@ -231,11 +224,7 @@ public UserResponse updateUser(Long id, UpdateUserRequest request, String curren
             user.setPhone(request.getPhone());
         }
 
-        // DO NOT allow updating username, dept, role, etc.
     }
-    // -----------------------------------------------------------------------------------------
-    // CASE 2: ADMIN / HR → can update everything (except password)
-    // -----------------------------------------------------------------------------------------
     else {
 
         // EMAIL (unique)
@@ -246,7 +235,6 @@ public UserResponse updateUser(Long id, UpdateUserRequest request, String curren
             user.setEmail(request.getEmail());
         }
 
-        // USERNAME (unique)
         if (request.getUsername() != null && !request.getUsername().equals(user.getUsername())) {
             if (userRepository.findByUsername(request.getUsername()).isPresent()) {
                 throw new IllegalArgumentException("Username already exists: " + request.getUsername());
@@ -254,37 +242,35 @@ public UserResponse updateUser(Long id, UpdateUserRequest request, String curren
             user.setUsername(request.getUsername());
         }
 
-        // FULL NAME
         if (request.getFullName() != null) {
             user.setFullName(request.getFullName());
         }
 
-        // PHONE
         if (request.getPhone() != null) {
             user.setPhone(request.getPhone());
         }
 
-        // DEPARTMENT
+
         if (request.getDepartment() != null) {
             user.setDepartment(request.getDepartment());
         }
 
-        // DESIGNATION
+
         if (request.getDesignation() != null) {
             user.setDesignation(request.getDesignation());
         }
 
-        // DATE OF JOINING
+
         if (request.getDateOfJoining() != null) {
             user.setDateOfJoining(request.getDateOfJoining());
         }
 
-        // EMPLOYMENT TYPE
+
         if (request.getEmploymentType() != null) {
             user.setEmploymentType(request.getEmploymentType());
         }
 
-        // EMPLOYEE CODE (unique)
+
         if (request.getEmployeeCode() != null) {
             Optional<User> existingUser = userRepository.findByEmployeeCode(request.getEmployeeCode());
             if (existingUser.isPresent() && !existingUser.get().getId().equals(id)) {
@@ -293,7 +279,7 @@ public UserResponse updateUser(Long id, UpdateUserRequest request, String curren
             user.setEmployeeCode(request.getEmployeeCode());
         }
 
-        // ROLE
+
         if (request.getRoleName() != null) {
             RoleName newRole = RoleName.valueOf(request.getRoleName().toUpperCase());
             Role role = roleRepository.findByName(newRole)
@@ -301,12 +287,10 @@ public UserResponse updateUser(Long id, UpdateUserRequest request, String curren
             user.setRole(role);
         }
 
-        // ACTIVE STATUS
         if (request.getIsActive() != null) {
             user.setActive(request.getIsActive());
         }
 
-        // PROFILE IMAGE URL (if updating via DTO)
         if (request.getProfileImageUrl() != null) {
             user.setProfileImageUrl(request.getProfileImageUrl());
         }
@@ -361,14 +345,12 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
     switch (roleName) {
         case ADMIN -> prefix = "ADM-";
         case HR -> prefix = "HR-";
-        default -> prefix = "EMP-";  // For EMPLOYEE and all others
+        default -> prefix = "EMP-";
     }
 
-    // Fetch the last code starting with prefix
     Optional<User> lastUser = userRepository
             .findTopByEmployeeCodeStartingWithOrderByEmployeeCodeDesc(prefix);
 
-    // If none found → first code
     if (lastUser.isEmpty()) {
         return prefix + "1001";
     }
@@ -379,7 +361,7 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
         int lastNumber = Integer.parseInt(lastCode.substring(prefix.length()));
         return prefix + (lastNumber + 1);
     } catch (NumberFormatException e) {
-        return prefix + "1001"; // If parsing fails
+        return prefix + "1001";
     }
 }
 
@@ -388,7 +370,6 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
         return UserResponse.builder()
                 .id(user.getId())
 
-                // NULL-SAFE Organization
                 .orgId(user.getOrganization() != null ? user.getOrganization().getId() : null)
                 .organizationName(user.getOrganization() != null ? user.getOrganization().getName() : null)
 
@@ -405,7 +386,6 @@ private String generateEmployeeCodeForRole(RoleName roleName) {
                 .isActive(user.isActive())
                 .createdAt(user.getCreatedAt())
 
-                // NULL-SAFE Created By
                 .createdById(user.getCreatedBy() != null ? user.getCreatedBy().getId() : null)
                 .createdByFullName(user.getCreatedBy() != null ? user.getCreatedBy().getFullName() : null)
 

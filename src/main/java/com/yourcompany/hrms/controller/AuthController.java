@@ -33,8 +33,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ResponseWrapper<AuthenticationResponse>> login(@Valid @RequestBody AuthenticationRequest request) {
-        // Authenticate user credentials using AuthenticationManager
-        // This will use BCryptPasswordEncoder automatically via AuthenticationProvider
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),

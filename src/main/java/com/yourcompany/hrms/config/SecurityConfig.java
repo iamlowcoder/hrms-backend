@@ -65,7 +65,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-                        // --- Allow Swagger / OpenAPI ---
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
@@ -74,10 +73,8 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml"
                         ).permitAll()
 
-                        // --- Public Authentication APIs ---
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // --- User Management Rules ---
                         .requestMatchers(HttpMethod.POST, "/api/users").hasAnyRole("ADMIN", "HR")
 
                         .requestMatchers(HttpMethod.GET, "/api/users")
@@ -91,7 +88,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/users/**")
                         .hasRole("ADMIN")
 
-                        // --- Any Other Request Must Be Authenticated ---
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
