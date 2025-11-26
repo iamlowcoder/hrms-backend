@@ -1,8 +1,10 @@
-package com.yourcompany.hrms.auth;
+package com.yourcompany.hrms.controller;
 
-import com.yourcompany.hrms.dto.ResponseWrapper;
+import com.yourcompany.hrms.auth.AuthenticationRequest;
+import com.yourcompany.hrms.auth.AuthenticationResponse;
+import com.yourcompany.hrms.config.ResponseWrapper;
 import com.yourcompany.hrms.jwt.JwtService;
-import com.yourcompany.hrms.security.UserDetailsServiceImpl;
+import com.yourcompany.hrms.service.UserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

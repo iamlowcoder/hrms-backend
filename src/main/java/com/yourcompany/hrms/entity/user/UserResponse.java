@@ -1,43 +1,38 @@
-package com.yourcompany.hrms.user;
+package com.yourcompany.hrms.entity.user;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.yourcompany.hrms.entity.EmploymentType;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserRequest {
+public class UserResponse {
 
-    @Email(message = "Email should be valid")
+    private Long id;
     private String email;
-
     private String fullName;
-
     private String phone;
-
     private String employeeCode;
-
-    private String roleName;
-
     private Boolean isActive;
-
+    private LocalDateTime createdAt;
+    private Long createdById;
+    private String createdByFullName;
+    private String roleName;
+    private Long orgId = 1L;
+    private String organizationName;
     private String username;
-
     private String department;
-
     private String designation;
-
     private LocalDate dateOfJoining;
-
     private EmploymentType employmentType;
-
+    private LocalDateTime lastLogin;
     private String profileImageUrl;
-}
 
+}

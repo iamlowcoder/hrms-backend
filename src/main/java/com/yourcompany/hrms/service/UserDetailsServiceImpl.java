@@ -1,6 +1,6 @@
-package com.yourcompany.hrms.security;
+package com.yourcompany.hrms.service;
 
-import com.yourcompany.hrms.entity.User;
+import com.yourcompany.hrms.entity.user.User;
 import com.yourcompany.hrms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

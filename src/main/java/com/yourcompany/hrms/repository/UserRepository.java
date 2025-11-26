@@ -1,7 +1,7 @@
 package com.yourcompany.hrms.repository;
 
 import com.yourcompany.hrms.entity.RoleName;
-import com.yourcompany.hrms.entity.User;
+import com.yourcompany.hrms.entity.user.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;

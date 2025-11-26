@@ -1,10 +1,14 @@
-package com.yourcompany.hrms.user;
+package com.yourcompany.hrms.service;
 
 import com.yourcompany.hrms.entity.*;
+import com.yourcompany.hrms.entity.user.User;
 import com.yourcompany.hrms.exception.ResourceNotFoundException;
 import com.yourcompany.hrms.repository.OrganizationRepository;
 import com.yourcompany.hrms.repository.RoleRepository;
 import com.yourcompany.hrms.repository.UserRepository;
+import com.yourcompany.hrms.entity.user.RegisterRequest;
+import com.yourcompany.hrms.entity.user.UpdateUserRequest;
+import com.yourcompany.hrms.entity.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

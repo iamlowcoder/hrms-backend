@@ -1,4 +1,4 @@
-package com.yourcompany.hrms.dto;
+package com.yourcompany.hrms.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

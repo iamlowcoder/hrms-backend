@@ -1,6 +1,10 @@
-package com.yourcompany.hrms.user;
+package com.yourcompany.hrms.controller;
 
-import com.yourcompany.hrms.dto.ResponseWrapper;
+import com.yourcompany.hrms.config.ResponseWrapper;
+import com.yourcompany.hrms.entity.user.RegisterRequest;
+import com.yourcompany.hrms.entity.user.UpdateUserRequest;
+import com.yourcompany.hrms.entity.user.UserResponse;
+import com.yourcompany.hrms.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

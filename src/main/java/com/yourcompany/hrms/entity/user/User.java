@@ -1,5 +1,8 @@
-package com.yourcompany.hrms.entity;
+package com.yourcompany.hrms.entity.user;
 
+import com.yourcompany.hrms.entity.EmploymentType;
+import com.yourcompany.hrms.entity.Organization;
+import com.yourcompany.hrms.entity.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

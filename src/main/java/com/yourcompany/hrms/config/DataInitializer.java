@@ -2,7 +2,7 @@ package com.yourcompany.hrms.config;
 
 import com.yourcompany.hrms.entity.Role;
 import com.yourcompany.hrms.entity.RoleName;
-import com.yourcompany.hrms.entity.User;
+import com.yourcompany.hrms.entity.user.User;
 import com.yourcompany.hrms.repository.RoleRepository;
 import com.yourcompany.hrms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
