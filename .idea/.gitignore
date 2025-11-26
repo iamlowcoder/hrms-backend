@@ -5,10 +5,15 @@
 *.iml
 *.iws
 *.ipr
-/out/
-# Default ignored files
-/shelf/
-/workspace.xml
+shelf/
+workspace.xml
+
+# ======================================
+# Eclipse / Spring Tool Suite
+# ======================================
+.project
+.classpath
+.settings/
 
 # ======================================
 # Maven
@@ -16,7 +21,6 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
 .mvn/wrapper/maven-wrapper.properties
-log.txt
 
 # ======================================
 # Logs
@@ -28,21 +32,21 @@ spring.log
 # ======================================
 # OS-specific files
 # ======================================
-# Windows
-Thumbs.db
-ehthumbs.db
-*.lnk
-
 # macOS
 .DS_Store
 .AppleDouble
 .LSOverride
 
+# Windows
+Thumbs.db
+ehthumbs.db
+*.lnk
+
 # Linux
 .cache/
 
 # ======================================
-# Java
+# Java & Build Artifacts
 # ======================================
 *.class
 *.jar
@@ -53,34 +57,26 @@ ehthumbs.db
 # Environment / Credentials
 # ======================================
 .env
+*.env
+*.key
+*.pem
 application-local.properties
 application-dev.properties
 application-prod.properties
 application-test.properties
-*.env
-*.key
-*.pem
 
-# For Spring Config
-/src/main/resources/application-*.yml
-/src/main/resources/application-*.yaml
-/src/main/resources/application-*.properties
+# Hide application configs except main
+src/main/resources/application-*.yml
+src/main/resources/application-*.yaml
+src/main/resources/application-*.properties
 
 # ======================================
-# Build Tools & Packaging
-# ======================================
-*.exe
-*.dll
-*.so
-*.dylib
-
-# ======================================
-# VS Code (if used)
+# VS Code
 # ======================================
 .vscode/
 
 # ======================================
-# Node (if frontend exists inside repo)
+# Node (if frontend inside project)
 # ======================================
 node_modules/
 dist/
